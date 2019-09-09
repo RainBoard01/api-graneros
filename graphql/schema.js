@@ -110,7 +110,7 @@ const schema = new GraphQLSchema({
             addRecord: {
                 type: RecordType,
                 args: {
-                    dateIn: { type: new GraphQLNonNull(GraphQLString) },
+                    dateIn: { type: GraphQLString },
                     observation: { type: new GraphQLNonNull(GraphQLString) },
                     personId: { type: new GraphQLNonNull(GraphQLID) },
                     vehicleId: { type: GraphQLID },
@@ -119,7 +119,7 @@ const schema = new GraphQLSchema({
                 },
                 resolve(parent, args) {
                     let record = new Record({
-                        dateIn: new Date(args.dateIn),
+                        dateIn: args.dateIn,
                         observation: args.observation,
                         personId: args.personId,
                         vehicleId: args.vehicleId,
@@ -199,6 +199,33 @@ const schema = new GraphQLSchema({
                         parcelId: args.parcelId
                     });
                     return owner.save();
+                }
+            },
+            updateRecord: {
+                type: RecordType,
+                args: {
+                    id: { type: GraphQLNonNull(GraphQLID) },
+                    personId: { type: GraphQLID },
+                    vehicleId: { type: GraphQLID },
+                    guardId: { type: GraphQLID },
+                    parcelId: { type: GraphQLID },
+                    observation: { type: GraphQLString }
+                },
+                resolve(parent, args){
+                    const finded = Record.findById(args.id, (err, record) => {});
+                    console.log(finded);
+
+                    /*return Record.findByIdAndUpdate(args.id,{
+                        $set: {
+                            personId: record.personId != null ? args.personId : record.personId,
+                            vehicleId: record.vehicleId != null ? args.vehicleId : record.vehicleId,
+                            guardId: record.guardId != null ? args.guardId : record.guardId,
+                            parcelId: record.parcelId != null ? args.parcelId : record.parcelId,
+                            observation: record.observation != null ? args.observation : record.observation 
+                        }
+                    }, {
+                        new: true
+                    });*/
                 }
             }
         }
