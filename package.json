@@ -1,0 +1,19 @@
+{
+  "name": "api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "graphql": "^14.5.3",
+    "graphql-api-koa": "^2.2.0",
+    "koa": "^2.8.1",
+    "koa-bodyparser": "^4.2.1",
+    "mongoose": "^5.6.11"
+  }
+}
