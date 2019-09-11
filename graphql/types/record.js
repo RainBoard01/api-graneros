@@ -15,26 +15,26 @@ const RecordType = new GraphQLObjectType({
         observation: { type: GraphQLString },
         person: {
             type: PersonType,
-            resolve(parent, args) {
-                return Person.findById(parent.personId);
+            async resolve(parent, args) {
+                return await Person.findById(parent.personId);
             }
         },
         parcel: {
             type: ParcelType,
-            resolve(parent, args) {
-                return Parcel.findById(parent.parcelId);
+            async resolve(parent, args) {
+                return await Parcel.findById(parent.parcelId);
             }
         },
         vehicle: {
             type: VehicleType,
-            resolve(parent, args) {
-                return Vehicle.findById(parent.vehicleId);
+            async resolve(parent, args) {
+                return await Vehicle.findById(parent.vehicleId);
             }
         },
         guard: {
             type: GuardType,
-            resolve(parent, args) {
-                return Guard.findById(parent.guardId);
+            async resolve(parent, args) {
+                return await Guard.findById(parent.guardId);
             }
         }
     })

@@ -25,8 +25,8 @@ const schema = new GraphQLSchema({
                 args: {
                     id: { type: GraphQLID }
                 },
-                resolve(parent, args) {
-                    return Record.findById(args.id);
+                async resolve(parent, args) {
+                    return await Record.findById(args.id);
                 }
             },
             parcel: {
@@ -34,8 +34,8 @@ const schema = new GraphQLSchema({
                 args: { 
                     id: { type: GraphQLID }
                 },
-                resolve(parent, args) {
-                    return Parcel.findById(args.id);
+                async resolve(parent, args) {
+                    return await Parcel.findById(args.id);
                 }
             },
             guard: {
@@ -43,8 +43,8 @@ const schema = new GraphQLSchema({
                 args: {
                     id: { type: GraphQLID }
                 },
-                resolve(parent, args) {
-                    return Guard.findById(args.id);
+                async resolve(parent, args) {
+                    return await Guard.findById(args.id);
                 }
             },
             person: {
@@ -52,8 +52,8 @@ const schema = new GraphQLSchema({
                 args: {
                     id: { type: GraphQLID }
                 },
-                resolve(parent, args) {
-                    return Person.findById(args.id);
+                async resolve(parent, args) {
+                    return await Person.findById(args.id);
                 }
             },
             vehicle: {
@@ -61,44 +61,44 @@ const schema = new GraphQLSchema({
                 args: {
                     id: { type: GraphQLID }
                 },
-                resolve(parent, args) {
-                    return Vehicle.findById(args.id);
+                async resolve(parent, args) {
+                    return await Vehicle.findById(args.id);
                 }
             },
             records: {
                 type: new GraphQLList(RecordType),
-                resolve(parent, args) {
-                    return Record.find({});
+                async resolve(parent, args) {
+                    return await Record.find({});
                 }
             },
             persons: {
                 type: new GraphQLList(PersonType),
-                resolve(parent, args) {
-                    return Person.find({});
+                async resolve(parent, args) {
+                    return await Person.find({});
                 }
             },
             vehicles: {
                 type: new GraphQLList(VehicleType),
-                resolve(parent, args) {
-                    return Vehicle.find({});
+                async resolve(parent, args) {
+                    return await Vehicle.find({});
                 }
             },
             parcels: {
                 type: new GraphQLList(ParcelType),
-                resolve(parent, args) {
-                    return Parcel.find({});
+                async resolve(parent, args) {
+                    return await Parcel.find({});
                 }
             },
             guards: {
                 type: new GraphQLList(GuardType),
-                resolve(parent, args) {
-                    return Guard.find({});
+                async resolve(parent, args) {
+                    return await Guard.find({});
                 }
             },
             owners: {
                 type: new GraphQLList(OwnerType),
-                resolve(parent, args) {
-                    return Owner.find({});
+                async resolve(parent, args) {
+                    return await Owner.find({});
                 }
             }
         }
@@ -117,7 +117,7 @@ const schema = new GraphQLSchema({
                     parcelId: { type: new GraphQLNonNull(GraphQLID) },
                     guardId: { type: new GraphQLNonNull(GraphQLID) }
                 },
-                resolve(parent, args) {
+                async resolve(parent, args) {
                     let record = new Record({
                         dateIn: args.dateIn,
                         observation: args.observation,
@@ -126,7 +126,7 @@ const schema = new GraphQLSchema({
                         parcelId: args.parcelId,
                         guardId: args.guardId
                     });
-                    return record.save();
+                    return await record.save();
                 }
             },
             addPerson: {
@@ -135,12 +135,12 @@ const schema = new GraphQLSchema({
                     rut: { type: new GraphQLNonNull(GraphQLString) },
                     name: { type: new GraphQLNonNull(GraphQLString) }
                 },
-                resolve(parent, args) {
+                async resolve(parent, args) {
                     let person = new Person({
                         rut: args.rut,
                         name: args.name
                     });
-                    return person.save();
+                    return await person.save();
                 }
             },
             addVehicle: {
@@ -149,12 +149,12 @@ const schema = new GraphQLSchema({
                     type: { type: new GraphQLNonNull(GraphQLString) },
                     patente: { type: GraphQLString }
                 },
-                resolve(parent, args) {
+                async resolve(parent, args) {
                     let vehicle = new Vehicle({
                         type: args.type,
                         patente: args.patente
                     });
-                    return vehicle.save();
+                    return await vehicle.save();
                 }
             },
             addGuard: {
@@ -163,12 +163,12 @@ const schema = new GraphQLSchema({
                     rut: { type: new GraphQLNonNull(GraphQLString) },
                     name: { type: new GraphQLNonNull(GraphQLString) }
                 },
-                resolve(parent, args) {
+                async resolve(parent, args) {
                     let guard = new Guard({
                         rut: args.rut,
                         name: args.name
                     });
-                    return guard.save();
+                    return await guard.save();
                 } 
             },
             addParcel: {
@@ -176,11 +176,11 @@ const schema = new GraphQLSchema({
                 args: {
                     number: { type: new GraphQLNonNull(GraphQLInt) }
                 },
-                resolve(parent, args) {
+                async resolve(parent, args) {
                     let parcel = new Parcel({
                         number: args.number
                     });
-                    return parcel.save();
+                    return await parcel.save();
                 }
             },
             addOwner: {
@@ -191,14 +191,14 @@ const schema = new GraphQLSchema({
                     phone: { type: new GraphQLNonNull(GraphQLInt) },
                     parcelId: { type: GraphQLID }
                 },
-                resolve(parent, args) {
+                async resolve(parent, args) {
                     let owner = new Owner({
                         rut: args.rut,
                         name: args.name,
                         phone: args.phone,
                         parcelId: args.parcelId
                     });
-                    return owner.save();
+                    return await owner.save();
                 }
             },
             updateRecord: {
@@ -211,21 +211,110 @@ const schema = new GraphQLSchema({
                     parcelId: { type: GraphQLID },
                     observation: { type: GraphQLString }
                 },
-                resolve(parent, args){
-                    const finded = Record.findById(args.id, (err, record) => {});
-                    console.log(finded);
-
-                    /*return Record.findByIdAndUpdate(args.id,{
-                        $set: {
-                            personId: record.personId != null ? args.personId : record.personId,
-                            vehicleId: record.vehicleId != null ? args.vehicleId : record.vehicleId,
-                            guardId: record.guardId != null ? args.guardId : record.guardId,
-                            parcelId: record.parcelId != null ? args.parcelId : record.parcelId,
-                            observation: record.observation != null ? args.observation : record.observation 
-                        }
+                async resolve(parent, args) {
+                    return await Record.findByIdAndUpdate(args.id, {
+                        personId: args.personId,
+                        vehicleId: args.vehicleId,
+                        guardId: args.guardId,
+                        parcelId: args.parcelId,
+                        observation: args.observation
                     }, {
-                        new: true
-                    });*/
+                        new: true,
+                        omitUndefined: true,
+                        useFindAndModify: false
+                    });
+                }
+            },
+            updatePerson: {
+                type: PersonType,
+                args: {
+                    id: { type: new GraphQLNonNull(GraphQLID) },
+                    rut: { type: GraphQLString },
+                    name: { type: GraphQLString }
+                },
+                async resolve(parent, args) {
+                    return await Person.findByIdAndUpdate(args.id, {
+                        rut: args.rut,
+                        name: args.name
+                    }, {
+                        new: true,
+                        omitUndefined: true,
+                        useFindAndModify: false
+                    });
+                }
+            },
+            updateVehicle: {
+                type: VehicleType,
+                args: {
+                    id: { type: new GraphQLNonNull(GraphQLID) },
+                    type: { type: GraphQLString },
+                    patente: { type: GraphQLString }
+                },
+                async resolve(parent, args) {
+                    return await Vehicle.findByIdAndUpdate(args.id, {
+                        type: args.type,
+                        patente: args.patente
+                    }, {
+                        new: true,
+                        omitUndefined: true,
+                        useFindAndModify: false
+                    });
+                }
+            },
+            updateParcel: {
+                type: ParcelType,
+                args: {
+                    id: { type: new GraphQLNonNull(GraphQLID) },
+                    number: { type: GraphQLInt }
+                },
+                async resolve(parent, args) {
+                    return await Parcel.findByIdAndUpdate(args.id, {
+                        number: args.number
+                    }, {
+                        new: true,
+                        omitUndefined: true,
+                        useFindAndModify: false
+                    });
+                }
+            },
+            updateOwner: {
+                type: OwnerType,
+                args: {
+                    id: { type: new GraphQLNonNull(GraphQLID) },
+                    rut: { type: GraphQLString },
+                    name: { type: GraphQLString },
+                    phone: { type: GraphQLInt },
+                    parcelId: { type: GraphQLID }
+                },
+                async resolve(parent, args) {
+                    return await Owner.findByIdAndUpdate(args.id, {
+                        rut: args.rut,
+                        name: args.name,
+                        phone: args.phone,
+                        parcelId: args.parcelId
+                    }, {
+                        new: true,
+                        omitUndefined: true,
+                        useFindAndModify: false
+                    });
+                }
+            },
+            updateGuard: {
+                type: GuardType,
+                args: {
+                    id: { type: new GraphQLNonNull(GraphQLID) },
+                    rut: { type: GraphQLString },
+                    name: { type: GraphQLString }
+                },
+                async resolve(parent, args) {
+                    return await Guard.findByIdAndUpdate(args.id, {
+                        rut: args.rut,
+                        name: args.name
+                    }, {
+                        new: true,
+                        omitUndefined: true,
+                        useFindAndModify: false
+                    });
                 }
             }
         }

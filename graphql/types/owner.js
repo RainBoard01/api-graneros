@@ -10,8 +10,8 @@ const OwnerType = new GraphQLObjectType({
         phone: { type: GraphQLInt },
         parcel: {
             type: ParcelType,
-            resolve(parent, args) {
-                return Parcel.findById(parent.parcelId);
+            async resolve(parent, args) {
+                return await Parcel.findById(parent.parcelId);
             }
         }
     })

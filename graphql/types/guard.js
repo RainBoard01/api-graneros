@@ -9,8 +9,8 @@ const GuardType = new GraphQLObjectType ({
         name: { type: GraphQLString },
         records: {
             type: new GraphQLList(RecordType),
-            resolve(parent, args) {
-                return Record.find({ guardId: parent.id });
+            async resolve(parent, args) {
+                return await Record.find({ guardId: parent.id });
             }
         }
     })

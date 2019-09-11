@@ -5,7 +5,7 @@ const Schema = mongoose.Schema;
 const recordSchema = new Schema({
     dateIn: {
         type: String,
-        default: new Date().toString()
+        default: new Date().toISOString()
     },
     observation: {
         type: String,

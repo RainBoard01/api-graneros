@@ -9,14 +9,14 @@ const ParcelType = new GraphQLObjectType({
         number: { type: GraphQLInt },
         owners: { 
             type: new GraphQLList(OwnerType),
-            resolve(parent, args) {
-                return Owner.find({ parcelId: parent.id });
+            async resolve(parent, args) {
+                return await Owner.find({ parcelId: parent.id });
             } 
         },
         records: {
             type: new GraphQLList(RecordType),
-            resolve(parent, args) {
-                return Record.find({ parcelId: parent.id });
+            async resolve(parent, args) {
+                return await Record.find({ parcelId: parent.id });
             }
         }
     })
