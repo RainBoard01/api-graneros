@@ -10,6 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@koa/cors": "^2.2.3",
     "graphql": "^14.5.3",
     "graphql-api-koa": "^2.2.0",
     "koa": "^2.8.1",
