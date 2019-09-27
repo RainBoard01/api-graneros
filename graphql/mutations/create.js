@@ -30,19 +30,77 @@ module.exports = {
         type: RecordType,
         args: {
             dateIn: { type: GraphQLString },
+            name: { type: new GraphQLNonNull(GraphQLString) },
+            rut: { type: new GraphQLNonNull(GraphQLString) },
+            type: { type: GraphQLString },
+            patente: { type: GraphQLString },
+            number: { type: new GraphQLNonNull(GraphQLInt) },
             observation: { type: new GraphQLNonNull(GraphQLString) },
-            personId: { type: new GraphQLNonNull(GraphQLID) },
-            vehicleId: { type: GraphQLID },
-            parcelId: { type: new GraphQLNonNull(GraphQLID) },
             guardId: { type: new GraphQLNonNull(GraphQLID) }
         },
         async resolve(parent, args) {
+            let personId;
+            await Person.findOneAndUpdate(
+                { rut: args.rut },
+                { $setOnInsert: { name: args.name, rut: args.rut }},
+                {
+                    upsert: true,
+                    new: true,
+                    omitUndefined: true,
+                    useFindAndModify: false
+                },
+                function(err, doc) {
+                    if (err) {
+                        console.log(err);
+                    }
+                    personId = doc._id;
+                }
+            );
+            
+            let vehicleId;
+            if(args.patente){
+                await Vehicle.findOneAndUpdate(
+                    { patente: args.patente },
+                    { $setOnInsert: { type: args.type, patente: args.patente }},
+                    {
+                        upsert: true,
+                        new: true,
+                        omitUndefined: true,
+                        useFindAndModify: false
+                    },
+                    function(err, doc) {
+                        if (err) {
+                            console.log(err);
+                        }
+                        vehicleId = doc._id;
+                    }
+                );
+            }
+
+            let parcelId;
+            await Parcel.findOneAndUpdate(
+                { number: args.number },
+                { $setOnInsert: { number: args.number }},
+                {
+                    upsert: true,
+                    new: true,
+                    omitUndefined: true,
+                    useFindAndModify: false
+                },
+                function(err, doc) {
+                    if (err) {
+                        console.log(err);
+                    }
+                    parcelId = doc._id;
+                }
+            );
+
             let record = new Record({
                 dateIn: args.dateIn,
                 observation: args.observation,
-                personId: args.personId,
-                vehicleId: args.vehicleId,
-                parcelId: args.parcelId,
+                personId: personId,
+                vehicleId: vehicleId,
+                parcelId: parcelId,
                 guardId: args.guardId
             });
             return await record.save();
